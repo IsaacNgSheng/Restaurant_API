@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from flask import Flask #pour créer le serveur/to create the server
-from flask import request #pour gérer les différentes requêtes/manage different requests
-from flask import Response #pour envoyer des réponses (on peut aussi utiliser jsonify avec, mais on a utilisé json)
+from flask import Flask, request, Response
 #to send responses (you can also use jsonify with it, but we used json)
 from werkzeug.utils import secure_filename
 import json
@@ -32,6 +31,18 @@ def project_info():
             ]
     }
     return Response(response, 200)
+from flask import Flask, request, Response
+import json
+
+app = Flask(__name__)
+ingredients = {}
+
+@app.route('/ingredients', methods=['GET'])
+def get_ingredients():
+    response = Response(response=json.dumps(ingredients),
+                        status=200,
+                        mimetype='application/json')
+    return response
 
 ingredients = {}
 

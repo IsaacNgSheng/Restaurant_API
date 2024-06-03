@@ -63,6 +63,17 @@ def delete_ingredients():
 def Add_ingredients(ing,cnsrv):
     global ingredients
     ingredients = {}
+    
+@app.route('/ingredients/<ing>/<cnsrv>', methods=['POST'])
+def Add_ingredients(ing,cnsrv):
+    global ingredients
+    ingredients = {}
+    for keys in ingredients.keys:
+        if keys=='ing':
+            return Response(ingredients,304)
+        else:
+            ingredients['ing']=cnsrv
+        return Response(ingredients,200)
 
 @app.route('/', methods=['POST'])
 def upload():

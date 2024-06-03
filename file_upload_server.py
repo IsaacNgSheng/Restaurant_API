@@ -44,6 +44,7 @@ def get_ingredients():
                   status=200,
                   mimetype='application/json')
     return resp
+
 def post_ingredients():
     global ingredients
     new_ingredients = request.json
@@ -58,14 +59,9 @@ def delete_ingredients():
     global ingredients
     ingredients = {}
     return Response(f'Ingredients supprimés avec succés', status=200)
-
-@app.route('/ingredients/<ing>/<cnsrv>', methods=['POST'])
-def Add_ingredients(ing,cnsrv):
-    global ingredients
-    ingredients = {}
     
 @app.route('/ingredients/<ing>/<cnsrv>', methods=['POST'])
-def Add_ingredients(ing,cnsrv):
+def add_ingredients(ing,cnsrv):
     global ingredients
     ingredients = {}
     for keys in ingredients.keys:

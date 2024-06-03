@@ -53,8 +53,6 @@ def post_ingredients():
                         mimetype='application/json')
     return resp
 
-ingredients = {}
-
 @app.route('/ingredients', methods=['DELETE'])
 def delete_ingredients():
     global ingredients

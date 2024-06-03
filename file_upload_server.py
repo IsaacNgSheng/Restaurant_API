@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-from flask import Flask, request, Response
-#to send responses (you can also use jsonify with it, but we used json)
+from flask import Flask
+from flask import request
+from flask import Response
 from werkzeug.utils import secure_filename
 import json
 import os
@@ -52,8 +53,6 @@ def post_ingredients():
                         mimetype='application/json')
     return resp
 
-
-
 ingredients = {}
 
 @app.route('/ingredients', methods=['DELETE'])
@@ -66,8 +65,6 @@ def delete_ingredients():
 def Add_ingredients(ing,cnsrv):
     global ingredients
     ingredients = {}
-    
-
 
 @app.route('/', methods=['POST'])
 def upload():

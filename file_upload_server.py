@@ -33,6 +33,14 @@ def project_info():
     }
     return Response(response, 200)
 
+ingredients = {}
+
+@app.route('/ingredients', methods=['DELETE'])
+def delete():
+    global ingredients
+    ingredients = {}
+    return Response(f'Ingredients supprimés avec succés', status=200)
+
 @app.route('/', methods=['POST'])
 def upload():
     resp = Response("Erreur inattendue", status=405)

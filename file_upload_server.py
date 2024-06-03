@@ -19,6 +19,19 @@ def allowed_file(filename):
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+@app.route('/project_info', methods=['GET'])
+def project_info():
+    response = {"groupe" : "GI3.1",
+        "depot":"https://gitlab.insa-lyon.fr/cbd-projet-conseil-en-restauration-biologique-et-locale/projet",
+        "authentification" : "IP",
+        "stockage" : "serialisation",
+        "membres" : [
+            {"prenom" : "Isaac", "nom" : "NG"},
+            {"prenom" : "Imane", "nom" : "KRIKECH"},
+            {"prenom" : "Isseu", "nom" : "DIAGNE"}
+            ]
+    }
+    return Response(response, 200)
 
 @app.route('/', methods=['POST'])
 def upload():

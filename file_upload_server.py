@@ -65,10 +65,10 @@ def add_ingredients(ing,cnsrv):
     global ingredients
     ingredients = {}
     if 'ing' in ingredients.keys:
-         return Response(ingredients,304)
+         return Response(ingredients,status=304)
     else:
         ingredients['ing']=cnsrv
-        return Response(ingredients,200)
+        return Response(ingredients,status=200)
         
 
 @app.route('/ingredients/<ing>/<cnsrv>', methods=['POST'])
@@ -77,9 +77,9 @@ def delete_ingredients(ing,cnsrv):
     ingredients = {}
     if 'ing' in ingredients.keys:
         ingredients.pop('ing',none)
-         return Response(ingredients,200)
+         return Response(ingredients,status=200)
     else:
-        return Response(ingredients,304)
+        return Response(ingredients,status=304)
 
 
 

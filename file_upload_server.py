@@ -36,10 +36,17 @@ def project_info():
 ingredients = {}
 
 @app.route('/ingredients', methods=['DELETE'])
-def delete():
+def delete_ingredients():
     global ingredients
     ingredients = {}
     return Response(f'Ingredients supprimés avec succés', status=200)
+
+@app.route('/ingredients/<ing>/<cnsrv>', methods=['POST'])
+def Add_ingredients(ing,cnsrv):
+    global ingredients
+    ingredients = {}
+    
+
 
 @app.route('/', methods=['POST'])
 def upload():

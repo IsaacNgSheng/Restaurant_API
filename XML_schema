@@ -1,0 +1,64 @@
+<restaurant>
+  <description>
+    <adresse_siege>
+      <rue>Mbao</rue>
+      <code_postal>69000</code_postal>
+      <ville>Dakar</ville>
+    </adresse_siege>
+    <adresse_franchise>
+      <rue>Liberte</rue>
+      <code_postal>75000</code_postal>
+      <ville>Saint_Louis</ville>
+    </adresse_franchise>
+  </description>
+  <stocks>
+    <ingredient id="011210" qte="300">riz</ingredient>
+    <ingredient id="101113" qte="150">viande</ingredient>
+    <ingredient id="089310" qte="20">sel</ingredient>
+    <ingredient id="104122" qte="30">huile</ingredient>
+    <ingredient id="10822" qte="200">chocolat</ingredient>
+    <ingredient id="10842" qte="100">epices</ingredient>
+    <ingredient id="108422" qte="100">piments/poivrons</ingredient>
+    <ingredient id="01472" qte="3">oeuf</ingredient>
+    <ingredient id="012512" qte="100">framboise</ingredient>
+    <ingredient id="012513" qte="100">fraise</ingredient>
+    <ingredient id="011334" qte="100">tomates</ingredient>
+    <ingredient id="011352" qte="100">oignons</ingredient>
+    <ingredient id="011343" qte="100">Patate douce</ingredient>
+    <ingredient id="105111" qte="100">lait</ingredient>
+    <ingredient id="106121" qte="100">farine</ingredient>
+  </stocks>
+  <recettes>
+    <recette nbCouverts="4" nbCouvertsParJour="100" service="diner">
+      <titre>tieb_yapp</titre>
+      <ingredients>
+        <ingredient id="011210" qte="300">riz</ingredient>
+        <ingredient id="101113" qte="150">viande</ingredient>
+        <ingredient id="089310" qte="20">sel</ingredient>
+        <ingredient id="104122" qte="30">huile</ingredient>
+        <ingredient id="10842" qte="100">epices</ingredient>
+        <ingredient id="108422" qte="100">piments/poivrons</ingredient>
+        <ingredient id="011334" qte="100">tomates</ingredient>
+        <ingredient id="011352" qte="100">oignons</ingredient>
+        <ingredient id="011343" qte="100">Patate douce</ingredient>
+      </ingredients>
+    </recette>
+    <recette nbCouverts="4" nbCouvertsParJour="90" service="dessert">
+      <titre>crepe_chocolat</titre>
+      <ingredients>
+        <ingredient id="10822" qte="200">chocolat</ingredient>
+        <ingredient id="105111" qte="100">lait</ingredient>
+        <ingredient id="01472" qte="3">oeuf</ingredient>
+        <ingredient id="106121" qte="100">farine</ingredient>
+      </ingredients>
+    </recette>
+    <recette nbCouverts="3" nbCouvertsParJour="50" service="boisson">
+      <titre>smoothie</titre>
+      <ingredients>
+        <ingredient id="012512" qte="100">framboise</ingredient>
+        <ingredient id="012513" qte="100">fraise</ingredient>
+        <ingredient id="105111" qte="100">lait</ingredient>
+      </ingredients>
+    </recette>
+  </recettes>
+</restaurant>

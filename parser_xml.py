@@ -21,6 +21,18 @@ def xml_to_json(filepath):
     tree = etree.parse(filepath)
     root = tree.getroot()
     output = {}
+
+    # Extracting address
+    adresse = root.find(".//adresse_restaurant")
+    address = {
+        "rue": adresse.find("rue").text,
+        "code_postal": adresse.find("code_postal").text,
+        "ville": adresse.find("ville").text
+    }
+    output["adresse"] = address
+
+    # Extracting ingredients
+    ingredients = {}
     for recette in root.findall(".//recette"):
         nbCouverts = recette.get("nbCouverts")
         if nbCouverts is None:
@@ -35,10 +47,11 @@ def xml_to_json(filepath):
             id = ingredient.get("id")
             label = root.find(".//stocks/ingredient[@id='{}']".format(id)).text
             conservation = root.find(".//stocks/ingredient[@id='{}']".format(id)).get("conservation")
-            if label in output:
-                output[label]["quantite"] += quantite
+            if label in ingredients:
+                ingredients[label]["quantite"] += quantite
             else:
-                output[label] = {"quantite": quantite, "conservation": conservation}
+                ingredients[label] = {"quantite": quantite, "conservation": conservation}
+    output["ingredients"] = ingredients
     return output
 
 

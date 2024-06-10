@@ -6,6 +6,7 @@ from flask import Response
 from werkzeug.utils import secure_filename
 import json
 import os
+import parser_xml
 
 
 UPLOAD_FOLDER = r'C:\Users\Isaac\OneDrive\Documents\NUS\Exchange\Notes\CBD\Exercise\Project'
@@ -31,11 +32,14 @@ def project_info():
             {"prenom" : "Isseu", "nom" : "DIAGNE"}
             ]
     }
-    return Response(response, 200)
+    return Response(response=json.dumps(response), 
+                    status=200, 
+                    mimetype='application/json')
 
 
 app = Flask(__name__)
 ingredients = {}
+adresse = {}
 
 @app.route('/ingredients', methods=['GET'])
 def get_ingredients():
@@ -58,28 +62,39 @@ def post_ingredients():
 def delete_ingredients():
     global ingredients
     ingredients = {}
-    return Response(f'Ingredients supprimés avec succés', status=200)
+    return Response(response=f'Ingredients supprimés avec succés', 
+                    status=200, 
+                    mimetype='application/json')
     
 @app.route('/ingredients/<ing>/<cnsrv>', methods=['POST'])
 def add_ingredients(ing,cnsrv):
     global ingredients
     ingredients = {}
     if 'ing' in ingredients.keys:
-         return Response(ingredients,status=304)
+         return Response(response=f"l'ingrédient à ajouter est déjà présent, aucun changement dans les ingrédients",
+                          status=304,
+                          mimetype='application/json')
     else:
         ingredients['ing']=cnsrv
-        return Response(ingredients,status=200)
+        return Response(response=json.dumps(ingredients),
+                        status=200,
+                        mimetype='application/json')
         
 
 @app.route('/ingredients/<ing>', methods=['DELETE'])
 def delete_ingredients(ing,cnsrv):
     global ingredients
     ingredients = {}
-    if 'ing' in ingredients.keys:
-        ingredients.pop('ing')
-        return Response(ingredients,status=200)
+    if ing in ingredients.keys:
+        ingredients.pop(ing)
+        return Response(resposne=json.dumps(ingredients),
+                        status=200,
+                        mimetype='application/json')
     else:
-        return Response(ingredients,status=304)
+        return Response(response=f"l'ingrédient à supprimer n'est pas présent, aucun changement dans les ingrédients",
+                        status=304,
+                        mimetype='application/json')
+
 
 @app.route('/', methods=['POST'])
 def upload():

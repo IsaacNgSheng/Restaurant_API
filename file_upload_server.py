@@ -38,13 +38,13 @@ app = Flask(__name__)
 ingredients = {}
 
 @app.route('/ingredients', methods=['GET'])
-
 def get_ingredients():
     resp = Response(response=json.dumps(ingredients),
                   status=200,
                   mimetype='application/json')
     return resp
 
+@app.route('/ingredients', methods=['POST'])
 def post_ingredients():
     global ingredients
     new_ingredients = request.json
@@ -63,6 +63,7 @@ def delete_ingredients():
 @app.route('/ingredients/<ing>/<cnsrv>', methods=['POST'])
 def add_ingredients(ing,cnsrv):
     global ingredients
+    ingredients = {}
     if 'ing' in ingredients.keys:
          return Response(ingredients,status=304)
     else:
@@ -70,16 +71,15 @@ def add_ingredients(ing,cnsrv):
         return Response(ingredients,status=200)
         
 
-@app.route('/ingredients/<ing>/<cnsrv>', methods=['POST'])
+@app.route('/ingredients/<ing>', methods=['DELETE'])
 def delete_ingredients(ing,cnsrv):
     global ingredients
+    ingredients = {}
     if 'ing' in ingredients.keys:
-        ingredients.pop('ing',none)
-         return Response(ingredients,status=200)
+        ingredients.pop('ing')
+        return Response(ingredients,status=200)
     else:
         return Response(ingredients,status=304)
-
-
 
 @app.route('/', methods=['POST'])
 def upload():

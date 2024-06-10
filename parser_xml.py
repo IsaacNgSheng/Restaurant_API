@@ -2,7 +2,6 @@ import lxml.etree as etree
 import json
 import argparse
 
-
 def validate_xml(filepath, schema):
     try:
         xmlschema = etree.XMLSchema(etree.parse(schema))
@@ -15,21 +14,30 @@ def validate_xml(filepath, schema):
         return False
     return True
 
-
 def xml_to_json(filepath):
-
     tree = etree.parse(filepath)
     root = tree.getroot()
     output = {}
 
-    # Extracting address
-    adresse = root.find(".//adresse_restaurant")
-    address = {
-        "rue": adresse.find("rue").text,
-        "code_postal": adresse.find("code_postal").text,
-        "ville": adresse.find("ville").text
-    }
-    output["adresse"] = address
+    # Extracting addresses
+    addresses = {}
+    adresse_siege = root.find(".//adresse_siege")
+    if adresse_siege is not None:
+        addresses["siege"] = {
+            "rue": adresse_siege.find("rue").text,
+            "code_postal": adresse_siege.find("code_postal").text,
+            "ville": adresse_siege.find("ville").text
+        }
+
+    adresse_franchise = root.find(".//adresse_franchise")
+    if adresse_franchise is not None:
+        addresses["franchise"] = {
+            "rue": adresse_franchise.find("rue").text,
+            "code_postal": adresse_franchise.find("code_postal").text,
+            "ville": adresse_franchise.find("ville").text
+        }
+
+    output["adresses"] = addresses
 
     # Extracting ingredients
     ingredients = {}
@@ -54,9 +62,7 @@ def xml_to_json(filepath):
     output["ingredients"] = ingredients
     return output
 
-
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser()
     parser.add_argument("-xml", "--inputXML", help="chemin du fichier XML à parser")
     parser.add_argument("-xsd", "--inputSchema", help="chemin du fichier XSD à parser")
@@ -78,5 +84,4 @@ if __name__ == "__main__":
                 json.dump(data, f)
                 print("Fichier JSON généré avec succès !")
         else:
-            print(json.dumps(data))
-
+            print(json.dumps(data, indent=4))

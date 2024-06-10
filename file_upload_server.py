@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-
+from cmath import sin
+from math import radians, cos, sqrt, atan2
+import requests
 from flask import Flask
 from flask import request
 from flask import Response
@@ -107,6 +109,147 @@ def modify_location(json_file):
     return Response(response=json.dumps(adresse),
                     status=200,
                     mimetype='application/json')
+
+
+def obtenir_coordonnees(adresse):
+    # URL de l'API OpenStreetMap
+    url = f"https://nominatim.openstreetmap.org/search?format=json&q={adresse}"
+    # Envoyer une requête GET à l'API
+    reponse = requests.get(url)
+    # Vérifier si la requête a réussi
+    if reponse.status_code == 200:
+        # Analyser la réponse JSON
+        data = reponse.json()
+        if data:
+            # Extraire les coordonnées de la première occurrence
+            latitude = float(data[0]['lat'])
+            longitude = float(data[0]['lon'])
+            return latitude, longitude
+        else:
+            print("Aucune donnée trouvée pour cette adresse.")
+            return None
+    else:
+        print("Erreur lors de la requête à l'API.")
+        return None
+
+def trouver_producteur_proche(denree, latitude, longitude, api_key):
+    # URL de l'API AgenceBIO
+    url = f"https://api.agencebio.org/v1/lieux-de-vente/{denree}/producteurs"
+
+    # Paramètres de requête
+    params = {
+        "lat": latitude,
+        "lon": longitude,
+        "limit": 1,  # Limite de résultats à 1, pour obtenir le plus proche
+        "api_key": api_key
+    }
+
+    # Envoyer une requête GET à l'API
+    reponse = requests.get(url, params=params)
+
+    # Vérifier si la requête a réussi
+    if reponse.status_code == 200:
+        # Analyser la réponse JSON
+        data = reponse.json()
+        if data and 'producteurs' in data:
+            # Extraire les informations du producteur le plus proche
+            producteur_proche = data['producteurs'][0]
+            nom = producteur_proche['nom']
+            distance = producteur_proche['distance']
+            return nom, distance
+        else:
+            print("Aucun producteur trouvé pour cette denrée.")
+            return None, None
+    else:
+        print("Erreur lors de la requête à l'API AgenceBIO.")
+        return None, None
+
+def trouver_distance_entre_points(latitude_depart, longitude_depart, latitude_arrivee, longitude_arrivee):
+    # URL de l'API IGN itinéraire
+    url = "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8z/itineraire/rest/route.json"
+
+    # Paramètres de requête
+    params = {
+        "start": f"{longitude_depart},{latitude_depart}",
+        "end": f"{longitude_arrivee},{latitude_arrivee}",
+        "method": "time",  # Méthode de calcul basée sur la durée de trajet
+        "graphName": "Voiture",  # Type de trajet en voiture
+        "gp-access-lib": "0.11.5",
+        "gp-version": "3.0",
+        "apikey": "CLE_API_IGN"  # Remplacez par votre clé API IGN itinéraire
+    }
+
+    # Envoyer une requête GET à l'API IGN itinéraire
+    reponse = requests.get(url, params=params)
+
+    # Vérifier si la requête a réussi
+    if reponse.status_code == 200:
+        # Analyser la réponse JSON
+        data = reponse.json()
+        if 'routes' in data and len(data['routes']) > 0:
+            # Extraire la distance la plus courte
+            distance = data['routes'][0]['summary']['totalDistance']
+            return distance
+        else:
+            print("Aucun itinéraire trouvé entre ces deux points.")
+            return None
+    else:
+        print("Erreur lors de la requête à l'API IGN itinéraire.")
+        return None
+def obtenir_donnees_entreprise_par_siret(siret, api_token):
+    # URL de l'API Recherche d'entreprise
+    url = f"https://entreprise.api.gouv.fr/v2/entreprises/{siret}"
+
+    # Paramètres de requête avec le token d'authentification
+    headers = {
+        "Authorization": f"Bearer {api_token}"
+    }
+
+    # Envoyer une requête GET à l'API Recherche d'entreprise
+    reponse = requests.get(url, headers=headers)
+
+    # Vérifier si la requête a réussi
+    if reponse.status_code == 200:
+        # Analyser la réponse JSON
+        data = reponse.json()
+        return data
+    else:
+        print("Erreur lors de la requête à l'API Recherche d'entreprise.")
+        return None
+
+
+def get_producer_for_ingredient(ingredient):
+    producers = {" Pain frais ":{" Entreprise ":" MONTOIR MATHIEU "," Manager ":" Mathieu Montoir "," Distance " :20.6}," Pommes de terre ":{" Entreprise ":" ESPACE EMPLOI - JARDINS DUBREIL "," Manager ":" Unknown "," Distance " :4.57}}
+    return producers.get(ingredient, None)
+def distance(address1, address2):
+    pass
+
+@app.route('/get_producers', methods=['GET'])
+def get_producers():
+    global ingredients, Adresse
+    if not ingredients or not Adresse:
+        param_manquants = []
+        if not ingredients:
+            param_manquants.append("ingredients")
+        if not Adresse:
+            param_manquants.append("Adresse")
+        return Response(param_manquants), 400
+    else:
+        producers = {}
+        for ingredient, conservateur in ingredients.items():
+            producer = get_producer_for_ingredient(ingredient)
+            if producer:
+                distance = distance(producer['address'], Adresse)
+                producers[ingredient] = {
+                    'Entreprise': producer['Entreprise'],
+                    'Manager': producer['Manager'],
+                    'Distance': distance
+                }
+    return Response(producers, 200)
+
+
+
+
 
 @app.route('/load_xml', methods=['POST'])
 def load_xml(filepath):

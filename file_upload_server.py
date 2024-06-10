@@ -36,6 +36,7 @@ def project_info():
 
 app = Flask(__name__)
 ingredients = {}
+Adresse={}
 
 @app.route('/ingredients', methods=['GET'])
 def get_ingredients():
@@ -63,7 +64,6 @@ def delete_ingredients():
 @app.route('/ingredients/<ing>/<cnsrv>', methods=['POST'])
 def add_ingredients(ing,cnsrv):
     global ingredients
-    ingredients = {}
     if 'ing' in ingredients.keys:
          return Response(ingredients,status=304)
     else:
@@ -74,12 +74,27 @@ def add_ingredients(ing,cnsrv):
 @app.route('/ingredients/<ing>', methods=['DELETE'])
 def delete_ingredients(ing,cnsrv):
     global ingredients
-    ingredients = {}
     if 'ing' in ingredients.keys:
         ingredients.pop('ing')
         return Response(ingredients,status=200)
     else:
         return Response(ingredients,status=304)
+
+
+@app.route('/location', methods=['GET'])  
+def manage_location():
+    global Adresse
+    return Response(Adresse,status=200)
+    
+
+@app.route('/location', methods=['POST'])  
+def modify_location(dict):
+    global Adresse
+    Adresse=dict
+    return Response(Adresse,status=200)
+        
+
+
 
 @app.route('/', methods=['POST'])
 def upload():

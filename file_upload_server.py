@@ -98,15 +98,18 @@ def delete_ingredients(ing,cnsrv):
 
 @app.route('/location', methods=['GET'])  
 def manage_location():
-    global adresse
-    return Response(adresse,status=200)
+    return Response(response=json.dumps(adresse),
+                    status=200,
+                    mimetype='application/json')
     
 
 @app.route('/location', methods=['POST'])  
-def modify_location(dict):
+def modify_location(json_file):
     global adresse
-    adresse=dict
-    return Response(adresse,status=200)
+    adresse=json.load(json_file)
+    return Response(response=json.dumps(adresse),
+                    status=200,
+                    mimetype='application/json')
 
 
 @app.route('/', methods=['POST'])

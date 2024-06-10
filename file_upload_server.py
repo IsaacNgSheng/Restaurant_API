@@ -79,7 +79,6 @@ def add_ingredients(ing,cnsrv):
                         status=200,
                         mimetype='application/json')
         
-
 @app.route('/ingredients/<ing>', methods=['DELETE'])
 def delete_ingredients(ing,cnsrv):
     global ingredients
@@ -93,8 +92,6 @@ def delete_ingredients(ing,cnsrv):
         return Response(response=f"l'ingrédient à supprimer n'est pas présent, aucun changement dans les ingrédients",
                         status=304,
                         mimetype='application/json')
-
-
 
 @app.route('/location', methods=['GET'])  
 def manage_location():
@@ -111,6 +108,23 @@ def modify_location(json_file):
                     status=200,
                     mimetype='application/json')
 
+@app.route('/load_xml', methods=['POST'])
+def load_xml(filepath):
+    global ingredients, adresse
+    json_file = parser_xml.xml_to_json(filepath)
+    dict_file = json.load(json_file)
+    ingredients_dict_file = dict_file["ingredients"]
+    adresse_dict_file = dict_file["adresse"]
+    ingredients = ingredients_dict_file
+    adresse = adresse_dict_file
+    if dict_file:
+        return Response(response="OK",
+                        status=200,
+                        mimetype='application/json')
+    else:
+        return Response(response='Mauvaise requête (pas de fichier, fichier mal formé, etc.)',
+                        status=400,
+                        mimetype='application/json')
 
 @app.route('/', methods=['POST'])
 def upload():

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Define simple elements -->
+  <xs:element name="titre" type="xs:string"/>
+  <xs:element name="rue" type="xs:string"/>
+  <xs:element name="code_postal" type="typecodepostal"/>
+  <xs:element name="ville" type="xs:string"/>
+  
+  <!-- Define simple types and restrictions -->
+  <xs:simpleType name="typecodepostal">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{5}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Define complex types for ingredient -->
+  <xs:complexType name="ingredientStockType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="qte" type="xs:integer" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="ingredientType">
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="qte" type="xs:integer" use="required"/>
+  </xs:complexType>
+
+  <!-- Define complex type for adresse -->
+  <xs:complexType name="adresseType">
+    <xs:sequence>
+      <xs:element ref="rue"/>
+      <xs:element ref="code_postal"/>
+      <xs:element ref="ville"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Define complex type for recette -->
+  <xs:complexType name="recetteType">
+    <xs:sequence>
+      <xs:element ref="titre"/>
+      <xs:element name="ingredients">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="ingredient" type="ingredientType" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="nbCouverts" type="xs:integer" use="required"/>
+    <xs:attribute name="nbCouvertsParJour" type="xs:integer" use="required"/>
+    <xs:attribute name="service" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <!-- Define complex type for stocks -->
+  <xs:complexType name="stocksType">
+    <xs:sequence>
+      <xs:element name="ingredient" type="ingredientStockType" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Define complex type for description -->
+  <xs:complexType name="descriptionType">
+    <xs:choice>
+      <xs:element name="adresse_restaurant" type="adresseType"/>
+      <xs:sequence>
+        <xs:element name="adresse_siege" type="adresseType"/>
+        <xs:element name="adresse_franchise" type="adresseType"/>
+      </xs:sequence>
+    </xs:choice>
+  </xs:complexType>
+
+  <!-- Define complex type for restaurant -->
+  <xs:complexType name="restaurantType">
+    <xs:sequence>
+      <xs:element name="description" type="descriptionType"/>
+      <xs:element name="stocks" type="stocksType"/>
+      <xs:element name="recettes">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="recette" type="recetteType" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Define root element -->
+  <xs:element name="restaurant" type="restaurantType"/>
+
+</xs:schema>

@@ -107,8 +107,6 @@ def modify_location(dict):
     global adresse
     adresse=dict
     return Response(adresse,status=200)
-        
-
 
 
 @app.route('/', methods=['POST'])

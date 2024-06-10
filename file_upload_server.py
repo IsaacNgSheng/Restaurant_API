@@ -40,7 +40,6 @@ def project_info():
 app = Flask(__name__)
 ingredients = {}
 adresse = {}
-Adresse={}
 
 @app.route('/ingredients', methods=['GET'])
 def get_ingredients():
@@ -70,7 +69,7 @@ def delete_ingredients():
 @app.route('/ingredients/<ing>/<cnsrv>', methods=['POST'])
 def add_ingredients(ing,cnsrv):
     global ingredients
-    if 'ing' in ingredients.keys:
+    if ing in ingredients.keys:
          return Response(response=f"l'ingrédient à ajouter est déjà présent, aucun changement dans les ingrédients",
                           status=304,
                           mimetype='application/json')
@@ -99,15 +98,15 @@ def delete_ingredients(ing,cnsrv):
 
 @app.route('/location', methods=['GET'])  
 def manage_location():
-    global Adresse
-    return Response(Adresse,status=200)
+    global adresse
+    return Response(adresse,status=200)
     
 
 @app.route('/location', methods=['POST'])  
 def modify_location(dict):
-    global Adresse
-    Adresse=dict
-    return Response(Adresse,status=200)
+    global adresse
+    adresse=dict
+    return Response(adresse,status=200)
         
 
 

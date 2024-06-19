@@ -42,6 +42,7 @@ def project_info():
 app = Flask(__name__)
 ingredients = {}
 adresse = {}
+users = {}
 
 @app.route('/ingredients', methods=['GET'])
 def get_ingredients():
@@ -273,6 +274,24 @@ def load_xml(filepath):
                         mimetype='application/json')
     else:
         return Response(response='Mauvaise requête (pas de fichier, fichier mal formé, etc.)',
+                        status=400,
+                        mimetype='application/json')
+
+#unfinished skeleton of 3.1
+@app.route('/register', methods=['POST'])
+def register(dict):
+    global users
+    username = dict["login"]
+    pw = dict["password"]
+
+    if username not in users:
+        users[username] = pw
+        #This should return an authentication token instead
+        return Response(response='La création de compte a réussi',
+                        status=200,
+                        mimetype='application/json')
+    else:
+        return Response(response={"error":"user  name  already  exists"},
                         status=400,
                         mimetype='application/json')
 

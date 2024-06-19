@@ -61,7 +61,7 @@ def post_ingredients():
     return resp
 
 @app.route('/ingredients', methods=['DELETE'])
-def delete_ingredients():
+def clear_ingredients():
     global ingredients
     ingredients = {}
     return Response(response=f'Ingredients supprimés avec succés', 
@@ -71,12 +71,12 @@ def delete_ingredients():
 @app.route('/ingredients/<ing>/<cnsrv>', methods=['POST'])
 def add_ingredients(ing,cnsrv):
     global ingredients
-    if ing in ingredients.keys:
+    if ing in ingredients.keys():
          return Response(response=f"l'ingrédient à ajouter est déjà présent, aucun changement dans les ingrédients",
                           status=304,
                           mimetype='application/json')
     else:
-        ingredients['ing']=cnsrv
+        ingredients[ing] = cnsrv
         return Response(response=json.dumps(ingredients),
                         status=200,
                         mimetype='application/json')
@@ -87,7 +87,7 @@ def delete_ingredients(ing,cnsrv):
     ingredients = {}
     if ing in ingredients.keys:
         ingredients.pop(ing)
-        return Response(resposne=json.dumps(ingredients),
+        return Response(response=json.dumps(ingredients),
                         status=200,
                         mimetype='application/json')
     else:

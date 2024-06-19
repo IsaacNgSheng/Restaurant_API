@@ -50,15 +50,23 @@ def xml_to_json(filepath):
         if nbCouvertsParJour is None:
             print("Attribut 'nbCouvertsParJour' manquant !")
             return None
+
         for ingredient in recette.findall(".//ingredient"):
             quantite = (int(nbCouvertsParJour) / int(nbCouverts)) * int(ingredient.get("qte"))
             id = ingredient.get("id")
-            label = root.find(".//stocks/ingredient[@id='{}']".format(id)).text
-            conservation = root.find(".//stocks/ingredient[@id='{}']".format(id)).get("conservation")
-            if label in ingredients:
-                ingredients[label]["quantite"] += quantite
+
+            # Correctly locate ingredients under <stocks>
+            ingredient_node = root.find(".//stocks/ingredient[@id='{}']".format(id))
+            if ingredient_node is not None:
+                label = ingredient_node.get("id")  # Changed to get the id attribute
+                conservation = ingredient_node.get("conservation")
+                if label in ingredients:
+                    ingredients[label]["quantite"] += quantite
+                else:
+                    ingredients[label] = {"quantite": quantite, "conservation": conservation}
             else:
-                ingredients[label] = {"quantite": quantite, "conservation": conservation}
+                print(f"Ingredient with id '{id}' not found in <stocks>")
+
     output["ingredients"] = ingredients
     return output
 

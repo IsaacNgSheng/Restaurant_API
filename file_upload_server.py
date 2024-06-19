@@ -117,11 +117,13 @@ def obtenir_coordonnees(adresse):
     # Envoyer une requête GET à l'API
     reponse = requests.get(url)
     # Vérifier si la requête a réussi
+    # Check if the request was successful
     if reponse.status_code == 200:
         # Analyser la réponse JSON
         data = reponse.json()
         if data:
             # Extraire les coordonnées de la première occurrence
+            # Extract coordinates from first occurrence
             latitude = float(data[0]['lat'])
             longitude = float(data[0]['lon'])
             return latitude, longitude
@@ -132,6 +134,7 @@ def obtenir_coordonnees(adresse):
         print("Erreur lors de la requête à l'API.")
         return None
 
+#find_producer_near
 def trouver_producteur_proche(denree, latitude, longitude, api_key):
     # URL de l'API AgenceBIO
     url = f"https://api.agencebio.org/v1/lieux-de-vente/{denree}/producteurs"
@@ -148,11 +151,13 @@ def trouver_producteur_proche(denree, latitude, longitude, api_key):
     reponse = requests.get(url, params=params)
 
     # Vérifier si la requête a réussi
+    # Check if the request was successful
     if reponse.status_code == 200:
         # Analyser la réponse JSON
         data = reponse.json()
         if data and 'producteurs' in data:
             # Extraire les informations du producteur le plus proche
+            # Extract information from the nearest producer
             producteur_proche = data['producteurs'][0]
             nom = producteur_proche['nom']
             distance = producteur_proche['distance']
@@ -164,6 +169,7 @@ def trouver_producteur_proche(denree, latitude, longitude, api_key):
         print("Erreur lors de la requête à l'API AgenceBIO.")
         return None, None
 
+#find_distance_between_points
 def trouver_distance_entre_points(latitude_depart, longitude_depart, latitude_arrivee, longitude_arrivee):
     # URL de l'API IGN itinéraire
     url = "https://wxs.ign.fr/an7nvfzojv5wa96dsga5nk8z/itineraire/rest/route.json"
@@ -172,11 +178,11 @@ def trouver_distance_entre_points(latitude_depart, longitude_depart, latitude_ar
     params = {
         "start": f"{longitude_depart},{latitude_depart}",
         "end": f"{longitude_arrivee},{latitude_arrivee}",
-        "method": "time",  # Méthode de calcul basée sur la durée de trajet
-        "graphName": "Voiture",  # Type de trajet en voiture
+        "method": "time",  # Méthode de calcul basée sur la durée de trajet/Calculation based on travel time
+        "graphName": "Voiture",  # Type de trajet en voiture/Car trip type
         "gp-access-lib": "0.11.5",
         "gp-version": "3.0",
-        "apikey": "CLE_API_IGN"  # Remplacez par votre clé API IGN itinéraire
+        "apikey": "CLE_API_IGN"  # Remplacez par votre clé API IGN itinéraire/Replace with your IGN API route key
     }
 
     # Envoyer une requête GET à l'API IGN itinéraire
@@ -196,6 +202,8 @@ def trouver_distance_entre_points(latitude_depart, longitude_depart, latitude_ar
     else:
         print("Erreur lors de la requête à l'API IGN itinéraire.")
         return None
+    
+# get_company_data_by_siret
 def obtenir_donnees_entreprise_par_siret(siret, api_token):
     # URL de l'API Recherche d'entreprise
     url = f"https://entreprise.api.gouv.fr/v2/entreprises/{siret}"
@@ -221,6 +229,7 @@ def obtenir_donnees_entreprise_par_siret(siret, api_token):
 def get_producer_for_ingredient(ingredient):
     producers = {" Pain frais ":{" Entreprise ":" MONTOIR MATHIEU "," Manager ":" Mathieu Montoir "," Distance " :20.6}," Pommes de terre ":{" Entreprise ":" ESPACE EMPLOI - JARDINS DUBREIL "," Manager ":" Unknown "," Distance " :4.57}}
     return producers.get(ingredient, None)
+
 def distance(address1, address2):
     pass
 
@@ -249,15 +258,13 @@ def get_producers():
 
 
 
-
-
 @app.route('/load_xml', methods=['POST'])
 def load_xml(filepath):
     global ingredients, adresse
     json_file = parser_xml.xml_to_json(filepath)
     dict_file = json.load(json_file)
     ingredients_dict_file = dict_file["ingredients"]
-    adresse_dict_file = dict_file["adresse"]
+    adresse_dict_file = dict_file["adresses"]
     ingredients = ingredients_dict_file
     adresse = adresse_dict_file
     if dict_file:

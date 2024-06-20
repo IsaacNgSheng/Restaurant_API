@@ -19,7 +19,7 @@
     <xs:simpleContent>
       <xs:extension base="xs:string">
         <xs:attribute name="id" type="xs:string" use="required"/>
-        <xs:attribute name="qte" type="xs:integer" use="required"/>
+        <xs:attribute name="conservation" type="xs:integer" use="optional"/>
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>

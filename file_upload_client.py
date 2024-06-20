@@ -157,7 +157,7 @@ class Client:
 if __name__ == "__main__":
     c = Client("localhost:5080", "http")
     print("client created")
-    if c.upload_file("XML.xml"):#, data=['Pierre', 'Paul', 'Jacques']):
+    if c.upload_file("XML.xml", route='/load_xml'):#, data=['Pierre', 'Paul', 'Jacques']):
         if c.lr_status_code() != 200:
             print(c.lr_status_code(), c.lr_response())
         else:

@@ -25,6 +25,60 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 print(app.config['UPLOAD_FOLDER'])
 
+@app.route('/load_xml', methods=['POST'])
+def upload():
+    resp = Response("Erreur inattendue", status=405)
+    if request.method == 'POST':
+        print(request.files)
+        # voir si la erquête post à une section 'fichiers'
+        # see if the post query has a 'files' section
+        if 'upload_file' not in request.files:
+            resp = Response("Pas de section “fichier” dans la requête", status=405)
+        else:
+            #file = request.files['XML.xml']
+            file = request.files['upload_file']
+            if file.filename == '': 
+                #on vérifie que le fichier est bien envoyé
+                #we check that the file is sent
+                resp = Response('Aucun fichier fourni', status = 405)
+            elif file and allowed_file(file.filename):
+                #on vérifie qu'il n'y a pas de pb de sécurité de base avec le fichier
+                #we check that there are no basic security problems with the file
+                filename = secure_filename(file.filename)
+                #on sauvegarde le fichier
+                #we save the file
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                resp = Response(f'Fichier {filename} sauvegardé', status = 200)
+                
+                def load_xml(filepath):
+                    global ingredients, adresse
+                    json_file = parser_xml.xml_to_json(filepath)
+                    dict_file = json_file
+                    ingredients_dict_file = dict_file["ingredients"]
+                    adresse_dict_file = dict_file["adresses"]
+                    ingredients = ingredients_dict_file
+                    adresse = adresse_dict_file
+                    if dict_file:
+                        return Response(response="OK",
+                                        status=200,
+                                        mimetype='application/json')
+                    else:
+                        return Response(response='Mauvaise requête (pas de fichier, fichier mal formé, etc.)',
+                                        status=400,
+                                        mimetype='application/json')
+                resp = load_xml(filename)
+                print(ingredients)
+                print(adresse)
+                return resp
+    else:
+        resp = Response(f"Unexpected error, method used : {request.method}", status = 405)
+    return resp
+
+
+
+
+
+
 @app.route('/project_info', methods=['GET'])
 def project_info():
     response = {"groupe" : "GI3.1",
@@ -261,23 +315,6 @@ def get_producers():
 
 
 
-@app.route('/load_xml', methods=['POST'])
-def load_xml(filepath):
-    global ingredients, adresse
-    json_file = parser_xml.xml_to_json(filepath)
-    dict_file = json.load(json_file)
-    ingredients_dict_file = dict_file["ingredients"]
-    adresse_dict_file = dict_file["adresses"]
-    ingredients = ingredients_dict_file
-    adresse = adresse_dict_file
-    if dict_file:
-        return Response(response="OK",
-                        status=200,
-                        mimetype='application/json')
-    else:
-        return Response(response='Mauvaise requête (pas de fichier, fichier mal formé, etc.)',
-                        status=400,
-                        mimetype='application/json')
 
 #Verify if 3.1 works
 class User:
@@ -343,34 +380,6 @@ def register(dict):
                         mimetype='application/json')
 
 
-@app.route('/', methods=['POST'])
-def upload():
-    resp = Response("Erreur inattendue", status=405)
-    if request.method == 'POST':
-        print(request.files)
-        # voir si la erquête post à une section 'fichiers'
-        # see if the post query has a 'files' section
-        if 'upload_file' not in request.files:
-            resp = Response("Pas de section “fichier” dans la requête", status=405)
-        else:
-            #file = request.files['XML.xml']
-            file = request.files['upload_file']
-            if file.filename == '': 
-                #on vérifie que le fichier est bien envoyé
-                #we check that the file is sent
-                resp = Response('Aucun fichier fourni', status = 405)
-            elif file and allowed_file(file.filename):
-                #on vérifie qu'il n'y a pas de pb de sécurité de base avec le fichier
-                #we check that there are no basic security problems with the file
-                filename = secure_filename(file.filename)
-                #on sauvegarde le fichier
-                #we save the file
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                resp = Response(f'Fichier {filename} sauvegardé', status = 200)
-                #resp = load_xml(file)
-    else:
-        resp = Response(f"Unexpected error, method used : {request.method}", status = 405)
-    return resp
 
 #will only execute if this file is run
 if __name__ == "__main__":

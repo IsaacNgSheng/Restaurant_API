@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 The error you're encountering indicates that the `<ingredient>` elements in the XML are expected to be empty (i.e., they should not have any text content) according to the schema definition. 
 
@@ -5,6 +6,7 @@ To resolve this, you need to remove the text content from the `<ingredient>` ele
 
 ### Corrected XML Document
 -->
+
 <restaurant>
   <description>
     <adresse_siege>

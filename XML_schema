@@ -1,9 +1,10 @@
+<!--
 The error you're encountering indicates that the `<ingredient>` elements in the XML are expected to be empty (i.e., they should not have any text content) according to the schema definition. 
 
 To resolve this, you need to remove the text content from the `<ingredient>` elements in both the `stocks` and `recettes` sections of your XML. Here's the corrected XML document:
 
 ### Corrected XML Document
-```xml
+-->
 <restaurant>
   <description>
     <adresse_siege>
@@ -68,10 +69,10 @@ To resolve this, you need to remove the text content from the `<ingredient>` ele
     </recette>
   </recettes>
 </restaurant>
-```
-
+<!--
 ### Explanation of Corrections
 
 1. **Removed Text Content**: The text content (e.g., "riz", "viande", etc.) inside the `<ingredient>` elements was removed. These elements now only have attributes as required by the schema.
 
-This should resolve the validation error and ensure your XML document conforms to the XSD schema.
+This should resolve the validation error and ensure your XML document conforms to the XSD schema. 
+-->

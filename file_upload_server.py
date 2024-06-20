@@ -85,7 +85,7 @@ def add_ingredients(ing,cnsrv):
                         mimetype='application/json')
         
 @app.route('/ingredients/<ing>', methods=['DELETE'])
-def delete_ingredients(ing,cnsrv):
+def delete_ingredients(ing):
     global ingredients
     ingredients = {}
     if ing in ingredients.keys:
@@ -279,8 +279,7 @@ def load_xml(filepath):
                         status=400,
                         mimetype='application/json')
 
-'''
-#unfinished skeleton of 3.1
+#Verify if 3.1 works
 class User:
 
     id = 0
@@ -342,7 +341,7 @@ def register(dict):
         return Response(response={"error":"user  name  already  exists"},
                         status=400,
                         mimetype='application/json')
-'''
+
 
 @app.route('/', methods=['POST'])
 def upload():
@@ -354,6 +353,7 @@ def upload():
         if 'upload_file' not in request.files:
             resp = Response("Pas de section “fichier” dans la requête", status=405)
         else:
+            #file = request.files['XML.xml']
             file = request.files['upload_file']
             if file.filename == '': 
                 #on vérifie que le fichier est bien envoyé
@@ -367,7 +367,7 @@ def upload():
                 #we save the file
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 resp = Response(f'Fichier {filename} sauvegardé', status = 200)
-                
+                #resp = load_xml(file)
     else:
         resp = Response(f"Unexpected error, method used : {request.method}", status = 405)
     return resp

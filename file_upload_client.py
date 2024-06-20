@@ -155,9 +155,12 @@ class Client:
         return res
 
 if __name__ == "__main__":
-    c = Client("localhost:8080", "http")
-    if c.upload_file("../TPXML/recette_sample_1.xml"):#, data=['Pierre', 'Paul', 'Jacques']):
+    c = Client("localhost:5080", "http")
+    print("client created")
+    if c.upload_file("XML.xml"):#, data=['Pierre', 'Paul', 'Jacques']):
         if c.lr_status_code() != 200:
             print(c.lr_status_code(), c.lr_response())
         else:
             print(c.lr_response())
+    else:
+        print(c.lr_error())

@@ -1,0 +1,78 @@
+<!--
+The error you're encountering indicates that the `<ingredient>` elements in the XML are expected to be empty (i.e., they should not have any text content) according to the schema definition. 
+
+To resolve this, you need to remove the text content from the `<ingredient>` elements in both the `stocks` and `recettes` sections of your XML. Here's the corrected XML document:
+
+### Corrected XML Document
+-->
+<restaurant>
+  <description>
+    <adresse_siege>
+      <rue>Mbao</rue>
+      <code_postal>69000</code_postal>
+      <ville>Dakar</ville>
+    </adresse_siege>
+    <adresse_franchise>
+      <rue>Liberte</rue>
+      <code_postal>75000</code_postal>
+      <ville>Saint_Louis</ville>
+    </adresse_franchise>
+  </description>
+  <stocks>
+    <ingredient id="011210" conservation="2"/>
+    <ingredient id="101113" conservation="1"/>
+    <ingredient id="089310" conservation="2"/>
+    <ingredient id="104122" conservation="3"/>
+    <ingredient id="10822" conservation="2"/>
+    <ingredient id="10842" conservation="5"/>
+    <ingredient id="108422" conservation="7"/>
+    <ingredient id="01472" conservation="3"/>
+    <ingredient id="012512" conservation="1"/>
+    <ingredient id="012513" conservation="3"/>
+    <ingredient id="011334" conservation="5"/>
+    <ingredient id="011352" conservation="6"/>
+    <ingredient id="011343" conservation="1"/>
+    <ingredient id="105111" conservation="4"/>
+    <ingredient id="106121" conservation="10"/>
+  </stocks>
+  <recettes>
+    <recette nbCouverts="4" nbCouvertsParJour="100" service="diner">
+      <titre>tieb_yapp</titre>
+      <ingredients>
+        <ingredient id="011210" qte="300"/>
+        <ingredient id="101113" qte="150"/>
+        <ingredient id="089310" qte="20"/>
+        <ingredient id="104122" qte="30"/>
+        <ingredient id="10842" qte="100"/>
+        <ingredient id="108422" qte="100"/>
+        <ingredient id="011334" qte="100"/>
+        <ingredient id="011352" qte="100"/>
+        <ingredient id="011343" qte="100"/>
+      </ingredients>
+    </recette>
+    <recette nbCouverts="4" nbCouvertsParJour="90" service="dessert">
+      <titre>crepe_chocolat</titre>
+      <ingredients>
+        <ingredient id="10822" qte="200"/>
+        <ingredient id="105111" qte="100"/>
+        <ingredient id="01472" qte="3"/>
+        <ingredient id="106121" qte="100"/>
+      </ingredients>
+    </recette>
+    <recette nbCouverts="3" nbCouvertsParJour="50" service="boisson">
+      <titre>smoothie</titre>
+      <ingredients>
+        <ingredient id="012512" qte="100"/>
+        <ingredient id="012513" qte="100"/>
+        <ingredient id="105111" qte="100"/>
+      </ingredients>
+    </recette>
+  </recettes>
+</restaurant>
+<!--
+### Explanation of Corrections
+
+1. **Removed Text Content**: The text content (e.g., "riz", "viande", etc.) inside the `<ingredient>` elements was removed. These elements now only have attributes as required by the schema.
+
+This should resolve the validation error and ensure your XML document conforms to the XSD schema. 
+-->

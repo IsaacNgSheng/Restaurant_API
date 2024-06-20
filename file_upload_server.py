@@ -9,9 +9,11 @@ from werkzeug.utils import secure_filename
 import json
 import os
 import parser_xml
+import random
+import string
 
 
-UPLOAD_FOLDER = r'C:\Users\Isaac\OneDrive\Documents\NUS\Exchange\Notes\CBD\Exercise\Project'
+UPLOAD_FOLDER = 'upload'
 ALLOWED_EXTENSIONS = {'xml'}
 
 def allowed_file(filename):
@@ -21,6 +23,7 @@ def allowed_file(filename):
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+print(app.config['UPLOAD_FOLDER'])
 
 @app.route('/project_info', methods=['GET'])
 def project_info():
@@ -39,10 +42,9 @@ def project_info():
                     mimetype='application/json')
 
 
-app = Flask(__name__)
 ingredients = {}
 adresse = {}
-users = {}
+users = {} #implemented with username:user_object key-value pair
 
 @app.route('/ingredients', methods=['GET'])
 def get_ingredients():
@@ -277,23 +279,70 @@ def load_xml(filepath):
                         status=400,
                         mimetype='application/json')
 
+'''
 #unfinished skeleton of 3.1
+class User:
+
+    id = 0
+
+    def __init__(self, username, pw):
+        self.username = username
+        self.pw = pw
+        self.id = id + 1
+        self.authenticated = False
+        self.active = False
+        self.anonymous = False
+
+    def is_authenticated(self):
+        return self.authenticated
+
+    def set_authentication(self, bool:bool):
+        self.authenticated = bool
+        return self
+
+    def is_active(self):
+        return self.active
+
+    def set_activity(self, bool:bool):
+        self.active = bool
+        return self
+
+    def is_anonymous(self):
+        return self.anonymous
+
+    def set_anonyminity(self, bool:bool):
+        self.anonymous = bool
+        return self
+
+    def get_id(self): #must return a string
+        return f"{self.id}"
+    
+    def generate_auth_code(length=10):
+        characters = string.ascii_letters + string.digits + "%*:.-~="
+        return ''.join(random.choice(characters) for _ in range(length))
+
 @app.route('/register', methods=['POST'])
 def register(dict):
     global users
-    username = dict["login"]
-    pw = dict["password"]
+    user = User(dict["login"], dict["password"])
 
-    if username not in users:
-        users[username] = pw
-        #This should return an authentication token instead
-        return Response(response='La création de compte a réussi',
+    if user.username not in users.keys():
+        #implemented with username:user_obj key-value pair
+        users[user.username] = user
+        user.set_authentication(True)
+        auth = user.generate_auth_code()
+        return Response(response=str(auth),
                         status=200,
+                        mimetype='application/json')
+    elif not dict or not isinstance(dict, dict) or 'login' not in dict or 'password' not in dict:
+        return Response(response={"error":"explication de l’erreur"},
+                        status=400,
                         mimetype='application/json')
     else:
         return Response(response={"error":"user  name  already  exists"},
                         status=400,
                         mimetype='application/json')
+'''
 
 @app.route('/', methods=['POST'])
 def upload():
@@ -318,6 +367,9 @@ def upload():
                 #we save the file
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 resp = Response(f'Fichier {filename} sauvegardé', status = 200)
+                
+    else:
+        resp = Response(f"Unexpected error, method used : {request.method}", status = 405)
     return resp
 
 #will only execute if this file is run

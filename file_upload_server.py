@@ -12,7 +12,6 @@ import parser_xml
 import random
 import string
 
-
 UPLOAD_FOLDER = 'upload'
 ALLOWED_EXTENSIONS = {'xml'}
 
@@ -70,10 +69,29 @@ def project_info():
                     status=200, 
                     mimetype='application/json')
 
+# Reading/Writing of storage.json
+def read_json(filepath):
+    with open(filepath, 'r') as file:
+        data = json.load(file)
+    return data
 
-ingredients = {}
-adresse = {}
-users = {} #implemented with username:user_object key-value pair
+def edit_json(data, key, value):
+    data[key] = value
+    return data
+
+def write_json(filepath, data):
+    with open(filepath, 'w') as file:
+        json.dump(data, file, indent=4)
+
+filepath = 'storage.json'
+
+# Read the JSON file
+data = read_json(filepath)
+
+# Save details in JSON file to local python dictionary
+ingredients = data["ingredients"]
+adresse = data["adresse"]
+users = data["users"] #implemented with username:user_object key-value pair
 
 @app.route('/ingredients', methods=['GET'])
 def get_ingredients():
@@ -388,6 +406,14 @@ def login(dict):
         return Response(response={"error":"explication de l’erreur"},
                         status=400,
                         mimetype='application/json')
+
+# Edit the JSON data
+updated_data_ingredients = edit_json(data, "ingredients", ingredients)
+updated_data_adresse = edit_json(updated_data_ingredients, "adresse", adresse)
+final_updated_data = edit_json(updated_data_adresse, "users", users)
+
+# Write the updated JSON data back to the file
+write_json(filepath, final_updated_data)
 
 #will only execute if this file is run
 if __name__ == "__main__":

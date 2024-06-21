@@ -134,7 +134,7 @@ def manage_location():
                     mimetype='application/json')
     
 
-@app.route('/location/<json_file>', methods=['POST'])  
+@app.route('/location', methods=['POST'])  
 def modify_location(json_file):
     global adresse
     adresse=json.load(json_file)
@@ -290,21 +290,21 @@ def get_producers():
 
 @app.route('/load_xml', methods=['POST'])
 def load_xml(filepath):
-                    global ingredients, adresse
-                    json_file = parser_xml.xml_to_json(filepath)
-                    dict_file = json_file
-                    ingredients_dict_file = dict_file["ingredients"]
-                    adresse_dict_file = dict_file["adresses"]
-                    ingredients = ingredients_dict_file
-                    adresse = adresse_dict_file
-                    if dict_file:
-                        return Response(response="OK",
-                                        status=200,
-                                        mimetype='application/json')
-                    else:
-                        return Response(response='Mauvaise requête (pas de fichier, fichier mal formé, etc.)',
-                                        status=400,
-                                        mimetype='application/json')
+    global ingredients, adresse
+    json_file = parser_xml.xml_to_json(filepath)
+    dict_file = json_file
+    ingredients_dict_file = dict_file["ingredients"]
+    adresse_dict_file = dict_file["adresses"]
+    ingredients = ingredients_dict_file
+    adresse = adresse_dict_file
+    if dict_file:
+        return Response(response="OK",
+                        status=200,
+                        mimetype='application/json')
+    else:
+        return Response(response='Mauvaise requête (pas de fichier, fichier mal formé, etc.)',
+                        status=400,
+                        mimetype='application/json')
 
 class User:
 

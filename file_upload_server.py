@@ -78,8 +78,8 @@ users = {} #implemented with username:user_object key-value pair
 @app.route('/ingredients', methods=['GET'])
 def get_ingredients():
     resp = Response(response=json.dumps(ingredients),
-                  status=200,
-                  mimetype='application/json')
+                    status=200,
+                    mimetype='application/json')
     return resp
 
 @app.route('/ingredients', methods=['POST'])
@@ -127,14 +127,14 @@ def delete_ingredients(ing):
                         status=304,
                         mimetype='application/json')
 
-#@app.route('/location', methods=['GET'])  
+@app.route('/location', methods=['GET'])  
 def manage_location():
     return Response(response=json.dumps(adresse),
                     status=200,
                     mimetype='application/json')
     
 
-@app.route('/location', methods=['POST'])  
+@app.route('/location/<json_file>', methods=['POST'])  
 def modify_location(json_file):
     global adresse
     adresse=json.load(json_file)

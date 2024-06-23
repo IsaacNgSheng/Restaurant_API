@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from cmath import sin
-from math import radians, cos, sqrt, atan2
 import requests
 from flask import Flask, request, Response, jsonify
 from werkzeug.utils import secure_filename

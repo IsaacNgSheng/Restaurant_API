@@ -87,21 +87,21 @@ def get_ingredients():
 def post_ingredients():
     global ingredients
     ingredients = request.json
-    save_data_to_json()  # Sauvegarde des données après chaque modification
+    save_data_to_json()  
     return jsonify(ingredients), 200
 
 @app.route('/ingredients', methods=['DELETE'])
 def delete_ingredients():
     global ingredients
     ingredients = {}
-    save_data_to_json()  # Sauvegarde des données après chaque modification
+    save_data_to_json() 
     return "Liste des ingrédients effacée", 200
 
 @app.route('/ingredients/<ing>/<cnsrv>', methods=['POST'])
 def add_ingredient(ing, cnsrv):
     global ingredients
     ingredients[ing] = int(cnsrv)
-    save_data_to_json()  # Sauvegarde des données après chaque modification
+    save_data_to_json()  
     return jsonify(ingredients), 200
 
 @app.route('/ingredients/<ing>', methods=['DELETE'])
@@ -109,7 +109,7 @@ def delete_ingredient(ing):
     global ingredients
     if ing in ingredients:
         del ingredients[ing]
-        save_data_to_json()  # Sauvegarde des données après chaque modification
+        save_data_to_json()  
         return jsonify(ingredients), 200
     return jsonify(ingredients), 304
 
